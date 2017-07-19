@@ -36,6 +36,10 @@ public class SysResponse extends LogicalResponse {
 
     private JsonObject getRules(JsonObject response) {
         JsonValue rulesValue = response.get("rules");
-        return null != rulesValue && rulesValue.isString() ? Json.parse(rulesValue.asString()).asObject() : new JsonObject();
+        return shouldParseRules(rulesValue) ? Json.parse(rulesValue.asString()).asObject() : new JsonObject();
+    }
+
+    private boolean shouldParseRules(JsonValue rulesValue) {
+        return null != rulesValue && rulesValue.isString() && !rulesValue.asString().equals("");
     }
 }

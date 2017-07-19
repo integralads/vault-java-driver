@@ -5,7 +5,11 @@ import com.bettercloud.vault.VaultConfig;
 import com.bettercloud.vault.VaultException;
 import com.bettercloud.vault.json.JsonObject;
 import com.bettercloud.vault.response.SysResponse;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -15,7 +19,7 @@ import static junit.framework.TestCase.assertEquals;
 public class SysTests {
 
     private static final String LOCAL_SERVER_ADDRESS = "http://127.0.0.1";
-    private static final String DEV_SERVER_ROOT_TOKEN = "813d2212-1054-152e-57d1-cf6ff46f4e81";
+    private static final String DEV_SERVER_ROOT_TOKEN = "5104796b-cc35-782a-35be-ee3dd879e948";
 
     private static final VaultConfig testVaultConfig(int port) {
         try {
