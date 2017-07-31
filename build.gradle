@@ -1,10 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-group 'com.bettercloud'
 archivesBaseName = 'vault-java-driver'
-version '3.0.0'
 ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
 compileJava {
@@ -123,51 +122,24 @@ signing {
     sign configurations.archives
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-//            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-//                authentication(userName: ossrhUsername, password: ossrhPassword)
-//            }
-            snapshotRepository(url: nexusUrl) {
-                authentication(userName: nexusUsername, password: nexusPassword)
-            }
-
-            pom.project {
-                name 'vault-java-driver'
-                packaging 'jar'
-                // optionally artifactId can be defined here
-                description 'Zero-dependency Java client for HashiCorp\'s Vault'
-                url 'https://github.com/BetterCloud/vault-java-driver'
-
-                scm {
-                    connection 'https://github.com/BetterCloud/vault-java-driver.git'
-                    developerConnection 'https://github.com/BetterCloud/vault-java-driver.git'
-                    url 'https://github.com/BetterCloud/vault-java-driver'
-                }
-
-                licenses {
-                    license {
-                        name 'MIT'
-                        url 'https://github.com/BetterCloud/vault-java-driver/blob/master/README.md'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'steve-perkins-bc'
-                        name 'Steve Perkins'
-                        email 'steve.perkins@bettercloud.com'
-                    }
-                }
-            }
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
         }
     }
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://nexus.303net.net:8081/nexus/content/repositories/thirdparty") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+
+            snapshotRepository(url: "http://nexus.303net.net:8081/nexus/content/repositories/snapshots") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+        }
+    }
+}
